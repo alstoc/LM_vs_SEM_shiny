@@ -116,10 +116,12 @@ server <- function(input, output) {
     ignoreNULL = FALSE)
     
     # Linear regression model
-    lin_reg <- reactiveValues()
+    lin_reg <- reactiveValues(res = NA, coefs = NA, CI = NA)
     observeEvent(input$settingsOK, {
         lin_reg$res <- lm(y ~ x, data = df())
         lin_reg$coefs <- lin_reg$res$coefficients
+        lin_reg$CI <- lin_reg$res %>%
+            predict(interval = "confidence", level = 0.95)
     },
     ignoreNULL = FALSE)
     
@@ -132,6 +134,9 @@ server <- function(input, output) {
                         slope = lin_reg$coefs[2],
                         colour = "red",
                         size = 1) +
+            geom_ribbon(aes(ymin = lin_reg$CI[, "lwr"],
+                            ymax = lin_reg$CI[, "upr"]),
+                        alpha = 0.3) +
             xlim(50, 150) +
             ylim(50, 150) +
             labs(title = "Datenpunkte und Regressionslinie",
