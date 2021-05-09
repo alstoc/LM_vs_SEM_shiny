@@ -27,7 +27,7 @@ rel_err  <- tibble(reliability = c(0.5, 0.7, 0.8, 0.9, 0.95, 1.0),
 ui <- dashboardPage(
     
     # dashboard settings
-    options = list(sidebarExpandOnHover = TRUE),
+    options = list(),
     
     # header
     dashboardHeader(title = "LM vs. SEM", 
@@ -35,6 +35,8 @@ ui <- dashboardPage(
     
     # sidebar
     dashboardSidebar(width = 350,
+        # Remove the sidebar toggle element
+        tags$script(JS("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';")),  
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
