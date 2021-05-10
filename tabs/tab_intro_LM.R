@@ -3,6 +3,7 @@ fluidPage(
     fluidRow(
         shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
                                 width = 9, collapsible = TRUE,
+                                style = "padding-left:20px; padding-right:40px;",
                                 includeMarkdown("content/text_lm_tutorial.Rmd")
         )
     ),
@@ -53,13 +54,21 @@ fluidPage(
                 trigger = "click",
                 width = 5,
                 front = div(
-                    style = "padding:10px",
+                    style = "padding-left:10px; 
+                    padding-right:10px;
+                    padding-top:1px;
+                    padding-bottom:39px;",
                     h4("Datenpunkte und Regressionslinie"),
                     h5("Klicken für mehr Informationen"),
                     hr(),
-                    plotOutput("lmPlot")),
+                    # Scatterplot with regression line
+                    plotOutput("lmPlot")
+                ),
                 back = div(
-                    style = "padding:10px",
+                    style = "padding-left:10px;
+                    padding-right:10px;
+                    padding-top:1px;
+                    padding-bottom:39px;",
                     h4("Regressionsmodell"),
                     h5("Klicken für Diagramm"),
                     hr(),
