@@ -141,8 +141,7 @@ server <- function(input, output) {
                         alpha = 0.3) +
             xlim(50, 150) +
             ylim(50, 150) +
-            labs(title = "Datenpunkte und Regressionslinie",
-                 x = "Extraversion",
+            labs(x = "Extraversion",
                  y = "Emotionale Intelligenz") +
             theme_minimal() +
             theme(plot.title = element_text(size = 18),

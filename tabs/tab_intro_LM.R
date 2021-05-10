@@ -1,8 +1,16 @@
 fluidPage(
+    # Information on how to use the app
+    fluidRow(
+        shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
+                                width = 9, collapsible = TRUE,
+                                includeMarkdown("content/text_lm_tutorial.Rmd")
+        )
+    ),
+    
     fluidRow(
         # menu with sliders for demo of measurement error with LM
-        box(id = "lm_demo_menu", title = "Parameter für die Datengenerierung", 
-            status = "primary", width = 4,
+        box(id = "lm_demo_menu", title = "Einstellungen für die Datengenerierung", 
+            width = 4,
             
             br(),
             br(),
@@ -41,27 +49,25 @@ fluidPage(
         ),
         
         # plot of linear regression and data
-        box(id = "lm_demo_output", title = "Output", width = 5,
-            
-            plotOutput("lmPlot"),
-            
-            br()
+        flipBox(id = "lm_demo_output",
+                trigger = "click",
+                width = 5,
+                front = div(
+                    style = "padding:10px",
+                    h4("Datenpunkte und Regressionslinie"),
+                    h5("Klicken für mehr Informationen"),
+                    hr(),
+                    plotOutput("lmPlot")),
+                back = div(
+                    style = "padding:10px",
+                    h4("Regressionsmodell"),
+                    h5("Klicken für Diagramm"),
+                    hr(),
+                    br(),
+                    # Console with regression model
+                    verbatimTextOutput("summary")
+                )
         ),
-    ),
-    
-    fluidRow(
-        
-        # table with generated raw data
-        box(title = "Daten", width = 4,
-            
-            DT::dataTableOutput("table")
-        ),
-        
-        # Terminal with regression model
-        box(title = "Regressionsmodell", width = 5,
-            
-            verbatimTextOutput("summary")
-        )
     )
 )
 

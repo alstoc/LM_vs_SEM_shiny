@@ -1,0 +1,7 @@
+---
+title: "text_lm_tutorial.Rmd"
+output: html_document
+---
+
+Messfehlerfreie Daten bilden eine zentrale Voraussetzung für den Einsatz der 
+linearen Einfachregression. 
