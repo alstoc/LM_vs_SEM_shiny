@@ -10,24 +10,23 @@
 pacman::p_load(
     shiny,
     shinyWidgets,
-    shinydashboard, 
-    shinydashboardPlus,
+    bs4Dash,  # Bootstrap 4 version of shinydashboard and shinydashboardPlus
     dashboardthemes,
     ggplot2,
     tidyverse,
-    DT
+    DT,
+    bslib,
+
 )
 
-# Create table containing error variance and corresponding reliability
-rel_err  <- tibble(reliability = c(0.5, 0.7, 0.8, 0.9, 0.95, 1.0),
-                   #error_var = c(1, 0.428571, 0.25, 0.111111, 0.052632),
-                   error_var = c(225, 96.428571, 56.25, 25, 11.842105, 0))
+# Import global variables and functions
+source("./global.R")
 
 # Define UI for application ----
 ui <- dashboardPage(
     
     # dashboard settings
-    options = list(),
+    theme = bslib::bs_theme("sandstone"),
     
     # header
     dashboardHeader(title = "LM vs. SEM", 
@@ -49,9 +48,6 @@ ui <- dashboardPage(
     
     # body
     dashboardBody(
-        
-        # set theme
-        shinyDashboardThemes("grey_light"),
         
         tabItems(
             # Intro tab content
