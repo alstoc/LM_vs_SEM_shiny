@@ -6,6 +6,7 @@
 #
 #    http://shiny.rstudio.com/
 #
+if(!require(pacman))install.packages("pacman")
 
 pacman::p_load(
     shiny,
@@ -23,7 +24,7 @@ pacman::p_load(
 source("./global.R")
 
 # Define UI for application ----
-ui <- dashboardPage(
+ui <- shinydashboardPlus::dashboardPage(
     
     # header
     dashboardHeader(title = "LM vs. SEM", 
@@ -32,7 +33,9 @@ ui <- dashboardPage(
     # sidebar
     dashboardSidebar(width = 350,
         # Remove the sidebar toggle element
-        tags$script(JS("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';")),  
+        tags$script(JS(
+            "document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';"
+            )),  
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
@@ -151,15 +154,17 @@ server <- function(input, output) {
     })
     
     # Create output table
-    output$table <- DT::renderDataTable(df(), 
-                                        options = list(pageLength = 10, 
-                                                       dom = "tpl",
-                                                       columnDefs = list(list(
-                                                           className = 'dt-center', 
-                                                           targets = "_all"))
-                                                       ),
-                                        rownames = FALSE,
-                                        selection = "none")
+    output$table <- 
+        DT::renderDataTable(df(),
+                            options = 
+                                list(pageLength = 10,
+                                     dom = "tpl",
+                                     columnDefs = list(list(
+                                         className = 'dt-center',
+                                         targets = "_all"))
+                                     ),
+                            rownames = FALSE,
+                            selection = "none")
 }
 
 # Run the application 

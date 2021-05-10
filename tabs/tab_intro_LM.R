@@ -10,7 +10,7 @@ fluidPage(
     
     fluidRow(
         # menu with sliders for demo of measurement error with LM
-        box(id = "lm_demo_menu", title = "Einstellungen für die Datengenerierung", 
+        shinydashboardPlus::box(id = "lm_demo_menu", title = "Einstellungen für die Datengenerierung", 
             width = 4,
             
             br(),
@@ -50,16 +50,15 @@ fluidPage(
         ),
         
         # plot of linear regression and data
-        flipBox(id = "lm_demo_output",
+        shinydashboardPlus::flipBox(id = "lm_demo_output",
                 trigger = "click",
                 width = 5,
                 front = div(
                     style = "padding-left:10px; 
                     padding-right:10px;
-                    padding-top:1px;
-                    padding-bottom:39px;",
+                    padding-top:1px;",
                     h4("Datenpunkte und Regressionslinie"),
-                    h5("Klicken für mehr Informationen"),
+                    h5("Klicken für R-Output"),
                     hr(),
                     # Scatterplot with regression line
                     plotOutput("lmPlot")
@@ -67,8 +66,7 @@ fluidPage(
                 back = div(
                     style = "padding-left:10px;
                     padding-right:10px;
-                    padding-top:1px;
-                    padding-bottom:39px;",
+                    padding-top:1px;",
                     h4("Regressionsmodell"),
                     h5("Klicken für Diagramm"),
                     hr(),
@@ -76,7 +74,7 @@ fluidPage(
                     # Console with regression model
                     verbatimTextOutput("summary")
                 )
-        ),
+        )
     )
 )
 
