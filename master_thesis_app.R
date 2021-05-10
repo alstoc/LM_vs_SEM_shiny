@@ -10,13 +10,13 @@
 pacman::p_load(
     shiny,
     shinyWidgets,
-    bs4Dash,  # Bootstrap 4 version of shinydashboard and shinydashboardPlus
+    shinydashboard,
+    shinydashboardPlus,
     dashboardthemes,
     ggplot2,
     tidyverse,
     DT,
-    bslib,
-
+    bslib
 )
 
 # Import global variables and functions
@@ -24,9 +24,6 @@ source("./global.R")
 
 # Define UI for application ----
 ui <- dashboardPage(
-    
-    # dashboard settings
-    theme = bslib::bs_theme("sandstone"),
     
     # header
     dashboardHeader(title = "LM vs. SEM", 
@@ -48,6 +45,9 @@ ui <- dashboardPage(
     
     # body
     dashboardBody(
+        
+        # set theme
+        shinyDashboardThemes("grey_light"),
         
         tabItems(
             # Intro tab content
