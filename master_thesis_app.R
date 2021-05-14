@@ -17,11 +17,13 @@ pacman::p_load(
     ggplot2,
     tidyverse,
     DT,
-    bslib
+    icon,
+    knitr
 )
 
 # Import global variables and functions
 source("./global.R")
+
 
 # Define UI for application ----
 ui <- shinydashboardPlus::dashboardPage(
@@ -138,8 +140,8 @@ server <- function(input, output) {
             geom_ribbon(aes(ymin = lin_reg$CI[, "lwr"],
                             ymax = lin_reg$CI[, "upr"]),
                         alpha = 0.3) +
-            xlim(50, 150) +
-            ylim(50, 150) +
+            xlim(input$xlim) +
+            ylim(input$ylim) +
             labs(x = "Extraversion",
                  y = "Emotionale Intelligenz") +
             theme_minimal() +

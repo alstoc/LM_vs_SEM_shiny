@@ -4,7 +4,7 @@ fluidPage(
         shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
                                 width = 9, collapsible = TRUE,
                                 style = "padding-left:20px; padding-right:40px;",
-                                includeMarkdown("content/text_lm_tutorial.Rmd")
+                                includeHTML("content/text_lm_tutorial.html")
         )
     ),
     
@@ -50,32 +50,39 @@ fluidPage(
         ),
         
         # plot of linear regression and data
-        shinydashboardPlus::flipBox(id = "lm_demo_output",
-                trigger = "click",
-                width = 5,
-                front = div(
-                    style = "padding-left:10px; 
-                    padding-right:10px;
-                    padding-top:1px;",
-                    h4("Datenpunkte und Regressionslinie"),
-                    h5("Klicken für R-Output"),
-                    hr(),
-                    # Scatterplot with regression line
-                    plotOutput("lmPlot")
-                ),
-                back = div(
-                    style = "padding-left:10px;
-                    padding-right:10px;
-                    padding-top:1px;",
-                    h4("Regressionsmodell"),
-                    h5("Klicken für Diagramm"),
-                    hr(),
-                    br(),
-                    # Console with regression model
-                    verbatimTextOutput("summary")
-                )
+        box(width = 5,
+            title = "Output Regressionsmodell",
+            tabsetPanel( 
+                tabPanel("Plot", 
+                         plotOutput("lmPlot")),
+                tabPanel("Summary", verbatimTextOutput("summary"))
+                
+            ),
+            sidebar = boxSidebar(
+                id = "lmPlot_sidebar",
+                width = 66,
+                style = 
+                "padding-left:30px;
+                padding-right:40px;",
+                background = "#F8F8F8",
+                br(),
+                sliderInput("xlim",
+                            "Grenzen der x-Achse: ",
+                            min = 0,
+                            max = 200,
+                            value = c(50, 150),
+                            step = 5),
+                
+                br(),
+                
+                sliderInput("ylim",
+                            "Grenzen der y-Achse: ",
+                            min = 0,
+                            max = 200,
+                            value = c(50, 150),
+                            step = 5))
         )
+
     )
 )
-
 
