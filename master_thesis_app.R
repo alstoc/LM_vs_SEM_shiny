@@ -86,7 +86,7 @@ ui <- shinydashboardPlus::dashboardPage(
 ) 
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
     
     # Generate latent variables
     xi <- eventReactive(input$settingsOK, {
@@ -182,6 +182,14 @@ server <- function(input, output) {
                                      ),
                             rownames = FALSE,
                             selection = "none")
+    
+    # Create PDF outputs
+    output$theory_pdfview <- renderUI({
+      tags$iframe(style="height:90vh; width:100%", 
+                  scrolling = "no",
+                  src="shiny_theorie.pdf",
+                  id = "pdf_iframe")
+    })
 }
 
 # Run the application 
