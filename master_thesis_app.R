@@ -41,7 +41,8 @@ ui <- shinydashboardPlus::dashboardPage(
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
-                     menuSubItem("Messfehler bei Einfachregression", tabName = "intro_LM")),
+                     menuSubItem("Theoretische Grundlagen", tabName = "theory"),
+                     menuSubItem("Messfehler bei Einfachregression", tabName = "app_LM")),
             menuItem("Studie 1", tabName = "study_1", 
                      icon = icon("th"), selected = FALSE)
         ),
@@ -62,8 +63,8 @@ ui <- shinydashboardPlus::dashboardPage(
             ),
             
             # Intro LM tab content
-            tabItem(tabName = "intro_LM",
-                    source("tabs/tab_intro_LM.R", 
+            tabItem(tabName = "app_LM",
+                    source("tabs/tab_app_LM.R", 
                            local = TRUE, encoding = "utf-8")[1]
             ),
             
@@ -119,10 +120,12 @@ server <- function(input, output) {
     ignoreNULL = FALSE)
     
     # Linear regression model
-    lin_reg <- reactiveValues(res = NA, coefs = NA, CI = NA)
+    lin_reg <- reactiveValues(res = NA, coefs = NA, CI = NA, true_coefs = NA)
     observeEvent(input$settingsOK, {
         lin_reg$res <- lm(y ~ x, data = df())
         lin_reg$coefs <- lin_reg$res$coefficients
+        lin_reg$true_coefs <- lm(eta() ~ xi()) %>% 
+            coef()
         lin_reg$CI <- lin_reg$res %>%
             predict(interval = "confidence", level = 0.95)
     },
@@ -133,6 +136,12 @@ server <- function(input, output) {
         # Plot data and regression line
         ggplot(df(), aes(x, y)) +
             geom_point(size = 2) +
+            geom_abline(intercept = lin_reg$true_coefs[1], 
+                        slope = lin_reg$true_coefs[2],
+                        colour = "grey",
+                        size = 1,
+                        alpha = 0.8,
+                        linetype = "dashed") +
             geom_abline(intercept = lin_reg$coefs[1], 
                         slope = lin_reg$coefs[2],
                         colour = "red",
