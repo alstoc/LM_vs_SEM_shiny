@@ -41,8 +41,8 @@ ui <- shinydashboardPlus::dashboardPage(
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
-                     menuSubItem("Theoretische Grundlagen", tabName = "theory"),
-                     menuSubItem("Messfehler bei Einfachregression", tabName = "app_LM")),
+                     menuSubItem("Theoretische Grundlagen", tabName = "intro_theory"),
+                     menuSubItem("Messfehler bei Einfachregression", tabName = "intro_app_LM")),
             menuItem("Studie 1", tabName = "study_1", 
                      icon = icon("th"), selected = FALSE)
         ),
@@ -62,9 +62,15 @@ ui <- shinydashboardPlus::dashboardPage(
                            local = TRUE, encoding = "utf-8")[1]
             ),
             
+            # Theory tab content
+            tabItem(tabName = "intro_theory",
+                    source("tabs/tab_intro_theory.R", 
+                           local = TRUE, encoding = "utf-8")[1]
+            ),
+            
             # Intro LM tab content
-            tabItem(tabName = "app_LM",
-                    source("tabs/tab_app_LM.R", 
+            tabItem(tabName = "intro_app_LM",
+                    source("tabs/tab_intro_app_LM.R", 
                            local = TRUE, encoding = "utf-8")[1]
             ),
             

@@ -4,7 +4,7 @@ fluidPage(
         shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
                                 width = 9, collapsible = TRUE,
                                 style = "padding-left:20px; padding-right:40px;",
-                                includeHTML("content/text_lm_tutorial.html")
+                                includeHTML("www/text_lm_tutorial.html")
         )
     ),
     

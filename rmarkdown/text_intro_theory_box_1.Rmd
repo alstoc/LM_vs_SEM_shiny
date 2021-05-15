@@ -1,0 +1,8 @@
+---
+output: html_fragment
+---
+
+Herzlich willkommen zu meiner Shiny-App!
+
+
+Im Rahmen meiner Masterarbeit *Messfehlerbehaftete Daten: Ein Vergleich zwischen linearer Regression und Strukturgleichungsmodellen* habe ich eine Shiny-Webapplikation programmiert. Diese soll die Auswirkungen messfehlerbehafteter Daten auf die Regressionsgerade aufgezeigen sowie ein Vergleich zum Strukturgleichungsmodell (engl. *structural equation modeling*, SEM) mit Hinblick auf die in zwei Monte-Carlo-Simulationen untersuchten Grössen ermöglichen. Durch die Webapplikation können auch Ergebnisse von Versuchsbedingungen betrachtet werden, die in der schriftlichen Arbeit nicht gezeigt wurden. 
