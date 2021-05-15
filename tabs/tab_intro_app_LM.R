@@ -13,37 +13,38 @@ fluidPage(
         shinydashboardPlus::box(id = "lm_demo_menu", title = "Einstellungen für die Datengenerierung", 
             width = 4,
             
-            br(),
+            helpText("Anmerkung: Je kleiner die Reliabilität,",
+                     "desto grösser die Messfehler."),
+            
             br(),
             
-            shinyWidgets::sliderTextInput("rel_x",
+            shinyWidgets::sliderTextInput("intro_rel_x",
                                           "Reliabilität der UV: ",
                                           choices = rel_err$reliability,
                                           selected = 1.0,
                                           grid = TRUE,
                                           hide_min_max = TRUE),
+
             
-            br(),
-            
-            shinyWidgets::sliderTextInput("rel_y",
+            shinyWidgets::sliderTextInput("intro_rel_y",
                                           "Reliabilität der AV: ",
                                           choices = rel_err$reliability,
                                           selected = 1.0,
                                           grid = TRUE,
                                           hide_min_max = TRUE),
             
-            br(),
+
             
-            shinyWidgets::sliderTextInput("nobs",
+            shinyWidgets::sliderTextInput("intro_nobs",
                                           "Stichprobengrösse: ",
                                           choices = c(50, 100, 250, 500, 1000),
                                           selected = 250,
                                           grid = TRUE,
                                           hide_min_max = TRUE),
-            
+
             br(),
             
-            actionButton("settingsOK", "Daten generieren!", class = "btn-block"),
+            actionButton("intro_settingsOK", "Daten generieren!", class = "btn-block"),
             
             br(),
             br()
@@ -54,19 +55,19 @@ fluidPage(
             title = "Output Regressionsmodell",
             tabsetPanel( 
                 tabPanel("Plot", 
-                         plotOutput("lmPlot")),
-                tabPanel("Summary", verbatimTextOutput("summary"))
+                         plotOutput("intro_plot")),
+                tabPanel("Summary", verbatimTextOutput("intro_summary"))
                 
             ),
             sidebar = boxSidebar(
-                id = "lmPlot_sidebar",
+                id = "intro_plot_sidebar",
                 width = 66,
                 style = 
                 "padding-left:30px;
                 padding-right:40px;",
                 background = "#F8F8F8",
                 br(),
-                sliderInput("xlim",
+                sliderInput("intro_xlim",
                             "Grenzen der x-Achse: ",
                             min = 0,
                             max = 200,
@@ -75,7 +76,7 @@ fluidPage(
                 
                 br(),
                 
-                sliderInput("ylim",
+                sliderInput("intro_ylim",
                             "Grenzen der y-Achse: ",
                             min = 0,
                             max = 200,

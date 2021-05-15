@@ -24,7 +24,6 @@ pacman::p_load(
 # Import global variables and functions
 source("./global.R")
 
-
 # Define UI for application ----
 ui <- shinydashboardPlus::dashboardPage(
     
@@ -87,39 +86,40 @@ ui <- shinydashboardPlus::dashboardPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    
+    # tab_intro_app ----
+  
     # Generate latent variables
-    xi <- eventReactive(input$settingsOK, {
-        rnorm(input$nobs, 100, 15)
+    xi <- eventReactive(input$intro_settingsOK, {
+        rnorm(input$intro_nobs, 100, 15)
     },
     ignoreNULL = FALSE)
     
     eta <- reactive({
-        xi() + rnorm(input$nobs, 0, 15)
+        xi() + rnorm(input$intro_nobs, 0, 15)
     })
     
     # Error variances
-    delta_var <- eventReactive(input$settingsOK, {
+    delta_var <- eventReactive(input$intro_settingsOK, {
         rel_err %>% 
-            dplyr::filter(reliability == input$rel_x) %>% 
+            dplyr::filter(reliability == input$intro_rel_x) %>% 
             dplyr::select(error_var) %>% 
             as.numeric()
     },
     ignoreNULL = FALSE)
     
-    epsilon_var <- eventReactive(input$settingsOK, {
+    epsilon_var <- eventReactive(input$intro_settingsOK, {
         rel_err %>% 
-            dplyr::filter(reliability == input$rel_y) %>% 
+            dplyr::filter(reliability == input$intro_rel_y) %>% 
             dplyr::select(error_var) %>% 
             as.numeric()
     },
     ignoreNULL = FALSE)
     
     # Generate data for x and y
-    df <- eventReactive(input$settingsOK, {
+    df <- eventReactive(input$intro_settingsOK, {
         # Generate measurement errors and indicators
-        x <- xi() + rnorm(input$nobs, 0, sqrt(delta_var()))
-        y <- eta() + rnorm(input$nobs, 0, sqrt(epsilon_var()))
+        x <- xi() + rnorm(input$intro_nobs, 0, sqrt(delta_var()))
+        y <- eta() + rnorm(input$intro_nobs, 0, sqrt(epsilon_var()))
         # Return data frame
         return(data.frame(x= x, y = y))
     }, 
@@ -127,7 +127,7 @@ server <- function(input, output, session) {
     
     # Linear regression model
     lin_reg <- reactiveValues(res = NA, coefs = NA, CI = NA, true_coefs = NA)
-    observeEvent(input$settingsOK, {
+    observeEvent(input$intro_settingsOK, {
         lin_reg$res <- lm(y ~ x, data = df())
         lin_reg$coefs <- lin_reg$res$coefficients
         lin_reg$true_coefs <- lm(eta() ~ xi()) %>% 
@@ -138,7 +138,7 @@ server <- function(input, output, session) {
     ignoreNULL = FALSE)
     
     # Create output plot
-    output$lmPlot <- renderPlot({
+    output$intro_plot <- renderPlot({
         # Plot data and regression line
         ggplot(df(), aes(x, y)) +
             geom_point(size = 2) +
@@ -155,8 +155,8 @@ server <- function(input, output, session) {
             geom_ribbon(aes(ymin = lin_reg$CI[, "lwr"],
                             ymax = lin_reg$CI[, "upr"]),
                         alpha = 0.3) +
-            xlim(input$xlim) +
-            ylim(input$ylim) +
+            xlim(input$intro_xlim) +
+            ylim(input$intro_ylim) +
             labs(x = "Extraversion",
                  y = "Emotionale Intelligenz") +
             theme_minimal() +
@@ -166,12 +166,12 @@ server <- function(input, output, session) {
     })
     
     # Create output text
-    output$summary <- renderPrint({
+    output$intro_summary <- renderPrint({
         summary(lin_reg$res)
     })
     
-    # Create output table
-    output$table <- 
+    # Create output table (DEACTIVATED)
+    output$intro_table <- 
         DT::renderDataTable(df(),
                             options = 
                                 list(pageLength = 10,
@@ -183,12 +183,18 @@ server <- function(input, output, session) {
                             rownames = FALSE,
                             selection = "none")
     
+    # tab_intro_theory ----
     # Create PDF outputs
     output$theory_pdfview <- renderUI({
       tags$iframe(style="height:90vh; width:100%", 
                   scrolling = "no",
-                  src="shiny_theorie.pdf",
+                  src="LM_und_SEM_theorie.pdf",
                   id = "pdf_iframe")
+    })
+    
+    # tab_study_1 ----
+    output$study_1_plot_b1_est <- renderPlot({
+      ggplot(df(), aes(x, y))
     })
 }
 
