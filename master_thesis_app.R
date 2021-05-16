@@ -34,10 +34,6 @@ ui <- shinydashboardPlus::dashboardPage(
     
     # sidebar
     dashboardSidebar(width = 350,
-        # Remove the sidebar toggle element
-        tags$script(JS(
-            "document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';"
-            )),  
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
@@ -91,7 +87,7 @@ ui <- shinydashboardPlus::dashboardPage(
     
 ) 
 
-# Define server logic required to draw a histogram
+# Define server logic required to present output
 server <- function(input, output, session) {
     
     # tab_intro_theory ----
