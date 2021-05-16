@@ -1,4 +1,6 @@
 load("./data/sim_res_study_1.Rda")
+load("./data/sim_res_study_2.Rda")
+
 
 # Create table containing error variance and corresponding reliability
 rel_err  <- tibble(reliability = c(0.5, 0.7, 0.8, 0.9, 0.95, 1.0),
