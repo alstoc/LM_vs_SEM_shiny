@@ -39,9 +39,12 @@ ui <- shinydashboardPlus::dashboardPage(
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
                      menuSubItem("Theoretische Grundlagen", tabName = "intro_theory"),
                      menuSubItem("Messfehler bei Einfachregression", tabName = "intro_app_LM")),
-            menuItem("Studie 1", icon = icon("th"), 
+            menuItem("Studie 1", icon = icon("dice-one"), 
                      menuSubItem("Design", tabName = "study_1_design"),
-                     menuSubItem("Ergebnisse", tabName = "study_1_results"))
+                     menuSubItem("Ergebnisse", tabName = "study_1_results")),
+            menuItem("Studie 2", icon = icon("dice-two"), 
+                     menuSubItem("Design", tabName = "study_2_design"),
+                     menuSubItem("Ergebnisse", tabName = "study_2_results"))
         ),
         minified = TRUE, 
         collapsed = FALSE),
@@ -80,6 +83,18 @@ ui <- shinydashboardPlus::dashboardPage(
             # Study 1 results tab content
             tabItem(tabName = "study_1_results",
                     source("tabs/tab_study_1_results.R", 
+                           local = TRUE, encoding = "utf-8")[1]
+            ),
+            
+            # Study 2 design tab content
+            tabItem(tabName = "study_2_design",
+                    source("tabs/tab_study_2_design.R", 
+                           local = TRUE, encoding = "utf-8")[1]
+            ),
+            
+            # Study 2 results tab content
+            tabItem(tabName = "study_2_results",
+                    source("tabs/tab_study_2_results.R", 
                            local = TRUE, encoding = "utf-8")[1]
             )
         )
@@ -358,6 +373,152 @@ server <- function(input, output, session) {
         return(table_output)
     }, rownames = TRUE)
     
+    # tab_study_2_design ----
+    output$study_2_pdfview <- renderUI({
+      tags$iframe(style="height:90vh; width:100%", 
+                  scrolling = "no",
+                  src="studie_2_design.pdf",
+                  id = "pdf_iframe")
+    })
+    
+    # tab_study_2_results ----
+    # Select data for user selected treatment only
+    sim_res_2_selected <- eventReactive(input$study_2_settingsOK, {
+      sim_res_2 %>% 
+        filter(lambda_x == input$study_2_lambda_x,
+               lambda_y == input$study_2_lambda_y,
+               dv == input$study_2_dv,
+               ev == input$study_2_ev)
+    }, ignoreNULL = FALSE)
+    # Plots
+    output$study_2_plot_b1_est <- renderPlot({
+        ggplot(sim_res_2_selected(), 
+               aes(x = method, 
+                   y = b1_est,
+                   fill = method)) +
+            geom_boxplot(outlier.colour = "grey69",
+                         size = 0.7,
+                         notch = TRUE) +
+            stat_summary(aes(group = method),
+                         fun = mean, 
+                         geom = "point", 
+                         size = 2, 
+                         colour = "black",
+                         alpha = 0.7,
+                         position = position_dodge(width = 0.75),
+                         shape = 4,
+                         stroke = 2,
+                         show.legend = FALSE) +
+            geom_hline(yintercept = 1, linetype = "dashed", color = "black") +
+            labs(x = "Methode", 
+                 y = expression(paste(hat(beta)[1])),
+                 fill = "Methode") +
+            theme_fruits() +
+            scale_fill_brewer(palette = "Dark2") +
+            theme(legend.key.size = unit(1, "cm"),
+                  axis.text.x = element_text(size = 14)) +
+            coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
+    }, bg="transparent")
+    
+    output$study_2_plot_b1_bias <- renderPlot({
+        ggplot(sim_res_2_selected(), 
+               aes(x = method, 
+                   y = bias_b1,
+                   fill = method)) +
+            geom_boxplot(outlier.colour = "grey69",
+                         size = 0.7,
+                         notch = TRUE) +
+            stat_summary(aes(group = method),
+                         fun = mean, 
+                         geom = "point", 
+                         size = 2, 
+                         colour = "black",
+                         alpha = 0.7,
+                         position = position_dodge(width = 0.75),
+                         shape = 4,
+                         stroke = 2,
+                         show.legend = FALSE) +
+            labs(x = "Methode", 
+                 y = expression(paste("Bias von ", hat(beta)[1])),
+                 fill = "Methode") +
+            theme_fruits() +
+            scale_fill_brewer(palette = "Dark2") +
+            theme(legend.key.size = unit(1, "cm"),
+                  axis.text.x = element_text(size = 14)) +
+            coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
+    }, bg="transparent")
+    
+    output$study_2_plot_se <- renderPlot({
+        ggplot(sim_res_2_selected(), 
+               aes(x = method, 
+                   y = b1_SE,
+                   fill = method)) +
+            geom_boxplot(outlier.colour = "grey69",
+                         size = 0.7,
+                         notch = TRUE) +
+            stat_summary(aes(group = method),
+                         fun = mean, 
+                         geom = "point", 
+                         size = 2, 
+                         colour = "black",
+                         alpha = 0.7,
+                         position = position_dodge(width = 0.75),
+                         shape = 4,
+                         stroke = 2,
+                         show.legend = FALSE) +
+            labs(x = "Methode", 
+                 y = expression(paste("SE(",hat(beta)[1], ")")),
+                 fill = "Methode") +
+            theme_fruits() +
+            scale_fill_brewer(palette = "Dark2") +
+            theme(legend.key.size = unit(1, "cm"),
+                  axis.text.x = element_text(size = 14)) +
+            coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
+    }, bg="transparent")
+    
+    # Table
+    output$study_2_table <- renderTable({
+        table_output <- data.frame(LM = rep(NA, 3), SEM = rep(NA, 3))
+        rownames(table_output) <- c("Relatives Bias", 
+                                    "Power",
+                                    "Irrtumshäufigkeit 95%-KI")
+        # Relative Bias
+        table_output[1, 1] <- sim_res_2_selected() %>% 
+            filter(method == "LM") %>% 
+            select(se_acc_treatment) %>% 
+            distinct() %>% 
+            round(digits = 2)
+        table_output[1, 2] <- sim_res_2_selected() %>% 
+            filter(method == "SEM") %>% 
+            select(se_acc_treatment) %>% 
+            distinct() %>% 
+            round(digits = 2)
+        # Power
+        table_output[2, 1] <- sim_res_2_selected() %>% 
+            filter(method == "LM") %>% 
+            select(power) %>% 
+            distinct() %>% 
+            round(digits = 2)
+        table_output[2, 2] <- sim_res_2_selected() %>% 
+            filter(method == "SEM") %>% 
+            select(power) %>% 
+            distinct() %>% 
+            round(digits = 2)
+        # 95% CI error rate
+        table_output[3, 1] <- sim_res_2_selected() %>% 
+            filter(method == "LM") %>% 
+            select(oob_prcnt ) %>% 
+            distinct() %>% 
+            round(digits = 2) %>% 
+            paste0(" %")
+        table_output[3, 2] <- sim_res_2_selected() %>% 
+            filter(method == "SEM") %>% 
+            select(oob_prcnt ) %>% 
+            distinct() %>% 
+            round(digits = 2) %>% 
+            paste0(" %")
+        return(table_output)
+    }, rownames = TRUE)
     
 }
 

@@ -4,7 +4,7 @@ fluidPage(
         shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
                                 width = 10, collapsible = TRUE,
                                 style = "padding-left:20px; padding-right:40px;",
-                                includeHTML("www/text_lm_tutorial.html")
+                                withMathJax(includeHTML("www/text_lm_tutorial.html"))
         )
     ),
     
@@ -19,7 +19,7 @@ fluidPage(
             br(),
             
             shinyWidgets::sliderTextInput("intro_rel_x",
-                                          "Reliabilität der UV: ",
+                                          HTML("Reliabilität der UV (&omega;<sub>x</sub>): "),
                                           choices = rel_err$reliability,
                                           selected = 1.0,
                                           grid = TRUE,
@@ -27,7 +27,7 @@ fluidPage(
 
             
             shinyWidgets::sliderTextInput("intro_rel_y",
-                                          "Reliabilität der AV: ",
+                                          HTML("Reliabilität der AVR (&omega;<sub>y</sub>): "),
                                           choices = rel_err$reliability,
                                           selected = 1.0,
                                           grid = TRUE,

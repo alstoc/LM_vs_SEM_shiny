@@ -4,4 +4,4 @@
 .Ruserdata
 rsconnect
 *.Rproj
-prepare_data.R
+prepare_data*.R

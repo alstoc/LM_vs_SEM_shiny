@@ -1,0 +1,10 @@
+---
+output: html_fragment
+---
+
+Im Panel links kann eine von insgesamt 32 Versuchsbedingungen ausgewählt werden, indem die Werte für folgende Variablen manipuliert werden:
+
+* Unabhängige Variablen (Indikatoren von $\xi$): Spannweite der Faktorladungen $(\lambda_x)$ und Fehlervarianzen $R(\sigma^2_\delta)$
+* Abhängige Variablen (Indikatoren von $\eta$): Spannweite der Faktorladungen $R(\lambda_y)$ und Fehlervarianzen $R(\sigma^2_\epsilon)$
+
+Das rechte Panel enthält die Outcomes von Studie 2 für die ausgewählte Versuchsbedingung. Die ersten drei Tabs enthalten Diagramme mit Boxplots, wobei mit einem Klick auf das Schraubenschlüssel-Symbol `r icon::fa("wrench")` oben rechts die Grenzen der y-Achse angepasst werden können. Das vierte Tab beinhaltet eine Tabelle mit weiteren relevanten Kennzahlen.
