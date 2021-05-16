@@ -27,7 +27,7 @@ fluidPage(
 
             
             shinyWidgets::sliderTextInput("intro_rel_y",
-                                          HTML("Reliabilität der AVR (&omega;<sub>y</sub>): "),
+                                          HTML("Reliabilität der AV (&omega;<sub>y</sub>): "),
                                           choices = rel_err$reliability,
                                           selected = 1.0,
                                           grid = TRUE,

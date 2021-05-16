@@ -25,14 +25,14 @@ library(DT)
 # Import global variables and functions
 source("./global.R")
 
-# Define UI for application ----
+# Define UI for application 
 ui <- shinydashboardPlus::dashboardPage(
     
-    # header
+    # header ----
     dashboardHeader(title = "LM vs. SEM", 
                     titleWidth = 350),
     
-    # sidebar
+    # sidebar ----
     dashboardSidebar(width = 350,
         sidebarMenu(
             menuItem("Intro", icon = icon("home"), startExpanded = TRUE,
@@ -46,10 +46,10 @@ ui <- shinydashboardPlus::dashboardPage(
                      menuSubItem("Design", tabName = "study_2_design"),
                      menuSubItem("Ergebnisse", tabName = "study_2_results"))
         ),
-        minified = TRUE, 
+        minified = FALSE, 
         collapsed = FALSE),
     
-    # body
+    # body ----
     dashboardBody(
         
         # set theme
