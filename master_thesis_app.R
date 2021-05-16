@@ -9,16 +9,20 @@
 if(!require(pacman))install.packages("pacman")
 
 pacman::p_load(
+    # shiny specific
     shiny,
     shinyWidgets,
     shinydashboard,
     shinydashboardPlus,
     dashboardthemes,
+    # ggplot
     ggplot2,
+    ggthemes,
+    RColorBrewer,
+    # tidyverse
     tidyverse,
-    DT,
-    icon,
-    knitr
+    # data table
+    DT
 )
 
 # Import global variables and functions
@@ -42,8 +46,9 @@ ui <- shinydashboardPlus::dashboardPage(
                      menuSubItem("Einleitung", tabName = "intro", selected = TRUE),
                      menuSubItem("Theoretische Grundlagen", tabName = "intro_theory"),
                      menuSubItem("Messfehler bei Einfachregression", tabName = "intro_app_LM")),
-            menuItem("Studie 1", tabName = "study_1", 
-                     icon = icon("th"), selected = FALSE)
+            menuItem("Studie 1", icon = icon("th"), 
+                     menuSubItem("Design", tabName = "study_1_design"),
+                     menuSubItem("Ergebnisse", tabName = "study_1_results"))
         ),
         minified = TRUE, 
         collapsed = FALSE),
@@ -73,10 +78,15 @@ ui <- shinydashboardPlus::dashboardPage(
                            local = TRUE, encoding = "utf-8")[1]
             ),
             
+            # Study 1 design tab content
+            tabItem(tabName = "study_1_design",
+                    source("tabs/tab_study_1_design.R", 
+                           local = TRUE, encoding = "utf-8")[1]
+            ),
             
-            # Study 1 tab content
-            tabItem(tabName = "study_1",
-                    source("tabs/tab_study_1.R", 
+            # Study 1 results tab content
+            tabItem(tabName = "study_1_results",
+                    source("tabs/tab_study_1_results.R", 
                            local = TRUE, encoding = "utf-8")[1]
             )
         )
@@ -86,6 +96,17 @@ ui <- shinydashboardPlus::dashboardPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
+    
+    # tab_intro_theory ----
+    # Create PDF output
+    output$theory_pdfview <- renderUI({
+      tags$iframe(style="height:90vh; width:100%", 
+                  scrolling = "no",
+                  src="LM_und_SEM_theorie.pdf",
+                  id = "pdf_iframe")
+    })
+  
+  
     # tab_intro_app ----
   
     # Generate latent variables
@@ -161,7 +182,7 @@ server <- function(input, output, session) {
                  y = "Emotionale Intelligenz") +
             theme_minimal() +
             theme(plot.title = element_text(size = 18),
-                  axis.title = element_text(size = 16),
+                  axis.title = element_text(size = 16, face = "bold"),
                   axis.text = element_text(size = 12))
     })
     
@@ -183,19 +204,168 @@ server <- function(input, output, session) {
                             rownames = FALSE,
                             selection = "none")
     
-    # tab_intro_theory ----
-    # Create PDF outputs
-    output$theory_pdfview <- renderUI({
+    # tab_study_1_design ----
+    # Create PDF output
+    output$study_1_pdfview <- renderUI({
       tags$iframe(style="height:90vh; width:100%", 
                   scrolling = "no",
-                  src="LM_und_SEM_theorie.pdf",
+                  src="studie_1_design.pdf",
                   id = "pdf_iframe")
     })
     
-    # tab_study_1 ----
+    # tab_study_1_results ----
+    # Select data for user selected treatment only
+    sim_res_selected <- eventReactive(input$study_1_settingsOK, {
+        sim_res %>% 
+            filter(rel_x == input$study_1_rel_x,
+                   rel_y == input$study_1_rel_y,
+                   nobs == input$study_1_nobs,
+                   nind == input$study_1_nind)
+    }, ignoreNULL = FALSE)
+    
+    # Plots
     output$study_1_plot_b1_est <- renderPlot({
-      ggplot(df(), aes(x, y))
-    })
+        ggplot(sim_res_selected(), 
+               aes(x = method, 
+                   y = b1_est,
+                   fill = method)) +
+        geom_boxplot(outlier.colour = "grey69",
+                     size = 0.7,
+                     notch = TRUE) +
+        stat_summary(aes(group = method),
+                     fun = mean, 
+                     geom = "point", 
+                     size = 2, 
+                     colour = "black",
+                     alpha = 0.7,
+                     position = position_dodge(width = 0.75),
+                     shape = 4,
+                     stroke = 2,
+                     show.legend = FALSE) +
+        geom_hline(yintercept = 1, linetype = "dashed", color = "black") +
+        labs(x = "Methode", 
+             y = expression(paste(hat(beta)[1])),
+             fill = "Methode") +
+        theme_fruits() +
+        scale_fill_brewer(palette = "Dark2") +
+        theme(legend.key.size = unit(1, "cm"),
+              axis.text.x = element_text(size = 14)) +
+        coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
+    }, bg="transparent")
+    
+    output$study_1_plot_b1_bias <- renderPlot({
+      ggplot(sim_res_selected(), 
+             aes(x = method, 
+                 y = bias_b1,
+                 fill = method)) +
+        geom_boxplot(outlier.colour = "grey69",
+                     size = 0.7,
+                     notch = TRUE) +
+        stat_summary(aes(group = method),
+                     fun = mean, 
+                     geom = "point", 
+                     size = 2, 
+                     colour = "black",
+                     alpha = 0.7,
+                     position = position_dodge(width = 0.75),
+                     shape = 4,
+                     stroke = 2,
+                     show.legend = FALSE) +
+        labs(x = "Methode", 
+             y = expression(paste("Bias von ", hat(beta)[1])),
+             fill = "Methode") +
+        theme_fruits() +
+        scale_fill_brewer(palette = "Dark2") +
+        theme(legend.key.size = unit(1, "cm"),
+              axis.text.x = element_text(size = 14)) +
+        coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
+    }, bg="transparent")
+    
+    output$study_1_plot_se <- renderPlot({
+      ggplot(sim_res_selected(), 
+             aes(x = method, 
+                 y = b1_SE,
+                 fill = method)) +
+        geom_boxplot(outlier.colour = "grey69",
+                     size = 0.7,
+                     notch = TRUE) +
+        stat_summary(aes(group = method),
+                     fun = mean, 
+                     geom = "point", 
+                     size = 2, 
+                     colour = "black",
+                     alpha = 0.7,
+                     position = position_dodge(width = 0.75),
+                     shape = 4,
+                     stroke = 2,
+                     show.legend = FALSE) +
+        labs(x = "Methode", 
+             y = expression(paste("SE(",hat(beta)[1], ")")),
+             fill = "Methode") +
+        theme_fruits() +
+        scale_fill_brewer(palette = "Dark2") +
+        theme(legend.key.size = unit(1, "cm"),
+              axis.text.x = element_text(size = 14)) +
+        coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
+    }, bg="transparent")
+    
+    # Table
+    output$study_1_table <- renderTable({
+        table_output <- data.frame(LM = rep(NA, 4), SEM = rep(NA, 4))
+        rownames(table_output) <- c("Relatives Bias", 
+                                    "Power", 
+                                    "Power (Alternative Berechnung)",
+                                    "Irrtumshäufigkeit 95%-KI")
+        # Relative Bias
+        table_output[1, 1] <- sim_res_selected() %>% 
+            filter(method == "LM") %>% 
+            select(se_acc_treatment) %>% 
+            distinct() %>% 
+            round(digits = 2)
+        table_output[1, 2] <- sim_res_selected() %>% 
+          filter(method == "SEM") %>% 
+          select(se_acc_treatment) %>% 
+          distinct() %>% 
+          round(digits = 2)
+        # Power
+        table_output[2, 1] <- sim_res_selected() %>% 
+          filter(method == "LM") %>% 
+          select(power) %>% 
+          distinct() %>% 
+          round(digits = 2)
+        table_output[2, 2] <- sim_res_selected() %>% 
+          filter(method == "SEM") %>% 
+          select(power) %>% 
+          distinct() %>% 
+          round(digits = 2)
+        # Power (alternative calculation)
+        table_output[3, 1] <- sim_res_selected() %>% 
+          filter(method == "LM") %>% 
+          select(power_alt) %>% 
+          distinct() %>% 
+          round(digits = 2)
+        table_output[3, 2] <- sim_res_selected() %>% 
+          filter(method == "SEM") %>% 
+          select(power_alt) %>% 
+          distinct() %>% 
+          round(digits = 2)
+        # 95% CI error rate
+        table_output[4, 1] <- sim_res_selected() %>% 
+          filter(method == "LM") %>% 
+          select(oob_prcnt ) %>% 
+          distinct() %>% 
+          round(digits = 2) %>% 
+          paste0(" %")
+        table_output[4, 2] <- sim_res_selected() %>% 
+          filter(method == "SEM") %>% 
+          select(oob_prcnt ) %>% 
+          distinct() %>% 
+          round(digits = 2) %>% 
+          paste0(" %")
+        return(table_output)
+    }, rownames = TRUE)
+    
+    
 }
 
 # Run the application 

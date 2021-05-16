@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 *.Rproj
+prepare_data.R

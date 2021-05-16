@@ -1,13 +1,11 @@
 
 
 
-<p>Messfehlerfreie Daten bilden eine zentrale Voraussetzung für den Einsatz der linearen Einfachregression. Zufällige Messfehler können sowohl in der <em>unabhängigen Variable</em> (UV) als auch der <em>abhängigen Variable</em> (AV) auftreten. Dabei sinkt die Reliabilität der UV und AV, je grösser die Messfehler ausfallen. Umgekehrt bedeutet eine perfekte Reliabilität von 1.0, dass die jeweilige Variable frei von Messfehlern ist.</p>
-<p>Im Panel links können die Reliabilitäten für die UV und AV sowie die Stichprobengrösse angepasst werden. Nach einem Klick auf den Button werden Daten mit den entsprechenden Eigenschaften generiert. Im Anschluss wird eine lineare Einfachregression an die generierten Daten angepasst. Die Ergebnisse dieses Regressionsmodells sind im rechten Panel einsehbar. Dieses zeigt im ersten Tab eine grafische Darstellung des Regressionsmodells:</p>
+<p>Im Panel links kann eine von insgesamt 360 Versuchsbedingungen ausgewählt werden, indem die Werte für folgende Variablen manipuliert werden:</p>
 <ul>
-<li>Scatterplot der generierten Daten</li>
-<li>geschätzte Regressionsgerade als durchgezogene Linie in Rot</li>
-<li>95%-Konfidenzintervall als graues Band um die geschätzte Regressionsgerade</li>
-<li>wahre Regressionsgerade als gestrichelte Linie in Grau</li>
+<li>Reliabilität der UV</li>
+<li>Reliabilität der AV</li>
+<li>Stichprobengrösse</li>
+<li>Anzahl Indikatoren pro Faktor</li>
 </ul>
-<p>Mit einem Klick auf das Zahnrad-Symbol <i class="fas  fa-cogs "></i> oben rechts können die Grenzen der x- sowie y-Achse angepasst werden.</p>
-<p>Das zweite Tab beinhaltet den Output des Regressionsmodells durch R mit den dazugehörigen Kennzahlen. Besonders interessant sind hier die Spannweite der Residuen, die Schätzungen des Regressionskoeffizienten <span class="math inline">\(\beta_1\)</span> sowie dessen Standardfehler, der Determinationskoeffizient <span class="math inline">\(R^2\)</span> sowie die F-Statistik. Deren Verhalten zeigt eindeutig, dass bei einer geringen Reliabilität der UV <span class="math inline">\(\beta_1\)</span> falsch geschätzt wird, während eine messfehlerbehaftete AV im Mittel zu korrekten Schätzungen mit grösserer Unsicherheit führt.</p>
+<p>Das rechte Panel enthält die Outcomes von Studie 1 für die ausgewählte Versuchsbedingung. Die ersten drei Tabs enthalten Diagramme mit Boxplots, wobei mit einem Klick auf das Schraubenschlüssel-Symbol <i class="fas  fa-wrench "></i> oben rechts die Grenzen der y-Achse angepasst werden können. Das vierte Tab beinhaltet eine Tabelle mit weiteren relevanten Kennzahlen.</p>

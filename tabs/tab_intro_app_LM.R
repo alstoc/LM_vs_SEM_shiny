@@ -2,7 +2,7 @@ fluidPage(
     # Information on how to use the app
     fluidRow(
         shinydashboardPlus::box(id = "lm_tutorial", title = "Anleitung",
-                                width = 9, collapsible = TRUE,
+                                width = 10, collapsible = TRUE,
                                 style = "padding-left:20px; padding-right:40px;",
                                 includeHTML("www/text_lm_tutorial.html")
         )
@@ -51,7 +51,7 @@ fluidPage(
         ),
         
         # plot of linear regression and data
-        box(width = 5,
+        box(width = 6,
             title = "Output Regressionsmodell",
             tabsetPanel( 
                 tabPanel("Plot", 
