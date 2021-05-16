@@ -2,7 +2,7 @@
 output: html_fragment
 ---
 
-Im Panel links kann eine von insgesamt 32 Versuchsbedingungen ausgewählt werden, indem die Werte für folgende Variablen manipuliert werden:
+Im Panel links kann eine von insgesamt 16 Versuchsbedingungen ausgewählt werden, indem die Werte für folgende Variablen manipuliert werden:
 
 * Unabhängige Variablen (Indikatoren von $\xi$): Spannweite der Faktorladungen $(\lambda_x)$ und Fehlervarianzen $R(\sigma^2_\delta)$
 * Abhängige Variablen (Indikatoren von $\eta$): Spannweite der Faktorladungen $R(\lambda_y)$ und Fehlervarianzen $R(\sigma^2_\epsilon)$
