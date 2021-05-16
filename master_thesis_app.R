@@ -6,24 +6,21 @@
 #
 #    http://shiny.rstudio.com/
 #
-if(!require(pacman))install.packages("pacman")
 
-pacman::p_load(
-    # shiny specific
-    shiny,
-    shinyWidgets,
-    shinydashboard,
-    shinydashboardPlus,
-    dashboardthemes,
-    # ggplot
-    ggplot2,
-    ggthemes,
-    RColorBrewer,
-    # tidyverse
-    tidyverse,
-    # data table
-    DT
-)
+# shiny specific
+library(shiny)
+library(shinyWidgets)
+library(shinydashboard)
+library(shinydashboardPlus)
+library(dashboardthemes)
+# ggplot
+library(ggplot2)
+library(ggthemes)
+library(RColorBrewer)
+# tidyverse
+library(tidyverse)
+# data table
+library(DT)
 
 # Import global variables and functions
 source("./global.R")

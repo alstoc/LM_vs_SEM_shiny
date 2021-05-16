@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+rsconnect
 *.Rproj
 prepare_data.R
