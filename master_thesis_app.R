@@ -191,7 +191,8 @@ server <- function(input, output, session) {
             theme_minimal() +
             theme(plot.title = element_text(size = 18),
                   axis.title = element_text(size = 16, face = "bold"),
-                  axis.text = element_text(size = 12))
+                  axis.text = element_text(size = 12),
+                  aspect.ratio = 9/16)
     })
     
     # Create output text
@@ -257,7 +258,8 @@ server <- function(input, output, session) {
         theme_fruits() +
         scale_fill_brewer(palette = "Dark2") +
         theme(legend.key.size = unit(1, "cm"),
-              axis.text.x = element_text(size = 14)) +
+              axis.text.x = element_text(size = 14),
+              aspect.ratio = 9/16) +
         coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
     }, bg="transparent")
     
@@ -285,7 +287,8 @@ server <- function(input, output, session) {
         theme_fruits() +
         scale_fill_brewer(palette = "Dark2") +
         theme(legend.key.size = unit(1, "cm"),
-              axis.text.x = element_text(size = 14)) +
+              axis.text.x = element_text(size = 14),
+              aspect.ratio = 9/16) +
         coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
     }, bg="transparent")
     
@@ -313,7 +316,8 @@ server <- function(input, output, session) {
         theme_fruits() +
         scale_fill_brewer(palette = "Dark2") +
         theme(legend.key.size = unit(1, "cm"),
-              axis.text.x = element_text(size = 14)) +
+              axis.text.x = element_text(size = 14),
+              aspect.ratio = 9/16) +
         coord_cartesian(ylim = c(input$study_1_ylim[1], input$study_1_ylim[2]))
     }, bg="transparent")
     
@@ -416,7 +420,8 @@ server <- function(input, output, session) {
             theme_fruits() +
             scale_fill_brewer(palette = "Dark2") +
             theme(legend.key.size = unit(1, "cm"),
-                  axis.text.x = element_text(size = 14)) +
+                  axis.text.x = element_text(size = 14),
+                  aspect.ratio = 9/16) +
             coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
     }, bg="transparent")
     
@@ -444,7 +449,8 @@ server <- function(input, output, session) {
             theme_fruits() +
             scale_fill_brewer(palette = "Dark2") +
             theme(legend.key.size = unit(1, "cm"),
-                  axis.text.x = element_text(size = 14)) +
+                  axis.text.x = element_text(size = 14),
+                  aspect.ratio = 9/16) +
             coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
     }, bg="transparent")
     
@@ -472,7 +478,8 @@ server <- function(input, output, session) {
             theme_fruits() +
             scale_fill_brewer(palette = "Dark2") +
             theme(legend.key.size = unit(1, "cm"),
-                  axis.text.x = element_text(size = 14)) +
+                  axis.text.x = element_text(size = 14),
+                  aspect.ratio = 9/16) +
             coord_cartesian(ylim = c(input$study_2_ylim[1], input$study_2_ylim[2]))
     }, bg="transparent")
     
